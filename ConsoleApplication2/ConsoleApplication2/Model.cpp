@@ -31,9 +31,9 @@ book *create_bklink() {
 		strcpy(q->name, fname);
 		strcpy(q->author, fauthor);
 		strcpy(q->publish, fpublish);
-		q->date.year = fyear;
-		q->date.month = fmonth;
-		q->date.day = fday;
+		q->year = fyear;
+		q->month = fmonth;
+		q->day = fday;
 		q->price = fprice;
 		strcpy(q->type, ftype);
 		p->next = q;
@@ -110,7 +110,7 @@ admin *create_admlink() {
 		printf("Open input file failed");
 		return NULL;
 	}
-	while (fscanf(r, "%s %s %s", fid, fname, fpaswd) != EOF) {
+	while (fscanf(r, "%s %s %s",  fname, fid, fpaswd) != EOF) {
 		q = (admin*)malloc(sizeof(admin));
 		strcpy(q->id, fid);
 		strcpy(q->name, fname);

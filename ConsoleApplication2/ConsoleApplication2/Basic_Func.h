@@ -3,6 +3,8 @@
 #define _BASIC_FUNC_H
 
 #include <Model.h>
+#include<Basic_Func.h>
+#include<Menu_Func.h>
 
 // 录入图书(管理员操作）   
 //在链表结尾添加新节点
@@ -21,5 +23,7 @@ void delbook_id(book *head);
 //根据书名删除图书（管理员操作、清除由于输错书号的书的信息）
 void delbook_name(book *head);
 
+//根据管理员账号密码匹配管理员
+void find_admin(admin *head1, book *head2);
 
 #endif

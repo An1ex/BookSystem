@@ -4,6 +4,7 @@
 
 #include<Model.h>
 #include<Basic_Func.h>
+#include<Menu_Func.h>
 
 //借书功能
 void Book_Borrow(book *head);

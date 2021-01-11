@@ -151,7 +151,7 @@ void admin_add(book *head)
 	n = atoi(n_c);
 	//char s[1000];// 定义字符串缓冲区，并接收用户输入
 	//InputBox(s, 500, NULL, "请输入相关信息：", NULL, 300, 200, false);
-	add_book(head);
+	add_book(head, n);
 	//outtextxy(0, 0, s);
 }
 

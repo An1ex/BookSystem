@@ -1,5 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<Model.h>
+#include<Basic_Func.h>
+#include<Menu_Func.h>
 #include<stdio.h>
 #include <graphics.h>
 #include <conio.h>
@@ -49,8 +51,6 @@ void add_book(book *head,int n) {
 void findbook_id(book *head) {
 	char id[20];
 	InputBox(id, 100, 0, "请输入您想要查询的书的书号:", 0, 0, 0, false);
-	//char *id_new = (char*)malloc(20);
-	//wcstombs(id_new, id, 20);
 	book *p = head->next;
 	book *head_find = (book*)malloc(sizeof(book));
 	book *find_q, *find_p;
@@ -67,9 +67,9 @@ void findbook_id(book *head) {
 			strcpy(find_q->name, p->name);
 			strcpy(find_q->author, p->author);
 			strcpy(find_q->publish, p->publish);
-			find_q->date.year = p->date.year;
-			find_q->date.month = p->date.month;
-			find_q->date.day = p->date.day;
+			find_q->year = p->year;
+			find_q->month = p->month;
+			find_q->day = p->day;
 			find_q->price = p->price;
 			strcpy(find_q->type, p->type);
 			find_p->next = find_q;
@@ -97,7 +97,7 @@ void findbook_name(book *head) {
 	find_p = find_q = head_find;
 	if (head == NULL)//链表为空链表
 	{
-		printf("图书库中没有图书\n");
+		outtext("图书库中没有图书");
 		return;
 	}
 	while (p != NULL) {
@@ -107,9 +107,9 @@ void findbook_name(book *head) {
 			strcpy(find_q->name, p->name);
 			strcpy(find_q->author, p->author);
 			strcpy(find_q->publish, p->publish);
-			find_q->date.year = p->date.year;
-			find_q->date.month = p->date.month;
-			find_q->date.day = p->date.day;
+			find_q->year = p->year;
+			find_q->month = p->month;
+			find_q->day = p->day;
 			find_q->price = p->price;
 			strcpy(find_q->type, p->type);
 			find_p->next = find_q;
@@ -119,10 +119,10 @@ void findbook_name(book *head) {
 	}
 	find_p->next = NULL;
 	if (head_find->next == NULL) {
-		printf("未找到相关图书\n");
+		outtext("未找到相关图书");
 	}
 	else {
-		printf("您的查找结果为:\n");
+		outtext("您的查找结果为:");
 		outlink(head_find);
 	}
 }
@@ -130,12 +130,11 @@ void findbook_name(book *head) {
 //根据书号删除图书（管理员操作、借书操作可调用）
 void delbook_id(book *head) {
 	char id[20];
-	printf("请输入您想要删除的书的书号:\n");
-	scanf("%s", id);
+	InputBox(id, 100, 0, "请输入您想要删除的书的书号:", 0, 0, 0, false);
 	book *p_front = head;
 	book *p = head->next;
 	if (p == NULL) {//链表为空链表
-		printf("图书库中没有图书\n");
+		outtext("图书库中没有图书");
 	}
 	while (p->next != NULL) {
 		if (strcmp(p->id, id) == 0) {
@@ -148,19 +147,18 @@ void delbook_id(book *head) {
 			p = p->next;
 		}
 	}
-	printf(" 删除完成，更新后图书库信息为:\n");
+	outtext("删除完成，更新后图书库信息为:");
 	outlink(head);
 }
 
 //根据书名删除图书（管理员操作、清除由于输错书号的书的信息）
 void delbook_name(book *head) {
-	char name[50];
-	printf("请输入您想要删除的书的书名:\n");
-	scanf("%s", name);
+	char name[20];
+	InputBox(name, 100, 0, "请输入您想要删除的书的书名:", 0, 0, 0, false);
 	book *p_front = head;
 	book *p = head->next;
 	if (p == NULL) {//链表为空链表
-		printf("图书库中没有图书\n");
+		outtext("图书库中没有图书");
 	}
 	while (p->next != NULL) {
 		if (strcmp(p->name, name) == 0) {
@@ -173,6 +171,40 @@ void delbook_name(book *head) {
 			p = p->next;
 		}
 	}
-	printf(" 删除完成，更新后图书库信息为:\n");
+	outtext("删除完成，更新后图书库信息为:");
 	outlink(head);
+}
+//管理员登陆函数
+//根据管理员账号密码匹配管理员
+void find_admin(admin *head1,book *head2) {
+	char input[40],*ptr;
+	char id[20], paswd[20];
+	InputBox(input, 100, 0, "请输入您的账号和密码（中间以空格分隔）:", 0, 0, 0, false);
+	//进行字符串分割
+	ptr = strtok(input, " ");
+	strcpy(id, ptr);
+	ptr = strtok(NULL, " ");
+	strcpy(paswd, ptr);
+	admin *p = head1->next;
+	while (p != NULL) {
+		if (strcmp(p->id,id) == 0) 
+		{ //找到相同账号的管理员
+			if (strcmp(p->paswd, paswd) == 0) 
+			{ 
+				//密码正确
+				break;
+				outtext("管理员登陆成功");
+				//在这跳转管理员功能主界面
+				admin_function(head2);
+			}
+			else 
+			{
+				break;
+				outtext("登陆失败，密码错误");
+				//在这里添加返回主页面
+			}
+		}
+	}
+	outtext("登陆失败，账号错误");
+	//在这里添加返回主页面
 }

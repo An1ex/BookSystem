@@ -79,7 +79,7 @@ tiaozhuan0:;//跳出循环
 			roundrect(250, 290, 410, 330, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
-				Book_Count();
+				Book_Count(head_book);
 				goto tiaozhuan0;
 
 
@@ -92,7 +92,7 @@ tiaozhuan0:;//跳出循环
 			roundrect(250, 360, 410, 400, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
-				admin_function(head_book);//管理员功能
+				find_admin(head_adm,head_book);//管理员登录函数
 				goto tiaozhuan0;
 
 			}
