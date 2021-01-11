@@ -5,7 +5,6 @@
 #include<stdio.h>
 #include <graphics.h>
 #include <conio.h>
-#include<stdbool.h> //布尔型，把书的已借/在库状态用布尔型存储
 #include<string.h>
 #include<time.h> //获取时间函数
 
@@ -25,7 +24,7 @@ void add_book(book *head,int n) {
 		InputBox(month_c, 100, 0, "请输入您要录入图书的信息，出版日期(月):", 0, 0, 0, false);
 		InputBox(day_c, 100, 0, "请输入您要录入图书的信息，出版日期(日):", 0, 0, 0, false);
 		InputBox(price_c, 100, 0, "请输入您要录入图书的信息，价格:", 0, 0, 0, false);
-		InputBox(newp->type, 100, 0, "请输入您要录入图书的信息，价格:", 0, 0, 0, false);
+		InputBox(newp->type, 100, 0, "请输入您要录入图书的信息，类型:", 0, 0, 0, false);
 		newp->year = atoi(year_c);
 		newp->month = atoi(month_c);
 		newp->day = atoi(day_c);
@@ -37,19 +36,19 @@ void add_book(book *head,int n) {
 		}
 	}
 	book *p = head->next;
-	while (p->next != NULL) {
+	while (p != NULL) {
 		p = p->next;
 	}//  找到图书库链表的最后一个节点 
-	p->next = newhead->next;//将新录入的图书链表接上
+	p = newhead->next;//将新录入的图书链表接上
+	free(newp);
+	free(p);
 	outtext("录入完成，更新后图书库信息为:");
 	outlink(head);
 }
 
 //按书号查询图书（管理员操作、借书操作）
 //原则上书号应该唯一，所以此函数也提供查询书号录入错误的书的功能，之后可用删除函数进行删除
-void findbook_id(book *head) {
-	char id[20];
-	InputBox(id, 100, 0, "请输入您想要查询的书的书号:", 0, 0, 0, false);
+void findbook_id(book *head,char id[]) {
 	book *p = head->next;
 	book *head_find = (book*)malloc(sizeof(book));
 	book *find_q, *find_p;
@@ -71,6 +70,7 @@ void findbook_id(book *head) {
 			find_q->day = p->day;
 			find_q->price = p->price;
 			strcpy(find_q->type, p->type);
+			find_q->state = p->state;
 			find_p->next = find_q;
 			find_p = find_q;
 		}
@@ -81,15 +81,14 @@ void findbook_id(book *head) {
 		outtext("未找到相关图书");
 	}
 	else {
-		outtext("您的查找结果为:");
+		outtextxy(0,0,"您的查找结果为:");
+		outtextxy(0,20,"书号   书名  作者      出版社             年  月  日 价格   类别    状态");
 		outlink(head_find);
 	}
 }
 
 //按书名查询图书（管理员操作、借书操作）
-void findbook_name(book *head) {
-	char name[50];
-	InputBox(name, 100, 0, "请输入您想要查询的书的书名:", 0, 0, 0, false);
+void findbook_name(book *head,char name[]) {
 	book *p = head->next;
 	book *head_find = (book*)malloc(sizeof(book));
 	book *find_q, *find_p;
@@ -111,6 +110,7 @@ void findbook_name(book *head) {
 			find_q->day = p->day;
 			find_q->price = p->price;
 			strcpy(find_q->type, p->type);
+			find_q->state = p->state;
 			find_p->next = find_q;
 			find_p = find_q;
 		}
@@ -121,7 +121,8 @@ void findbook_name(book *head) {
 		outtext("未找到相关图书");
 	}
 	else {
-		outtext("您的查找结果为:");
+		outtextxy(0, 0, "您的查找结果为:");
+		outtextxy(0, 20, "书号   书名  作者      出版社             年  月  日 价格   类别    状态");
 		outlink(head_find);
 	}
 }
@@ -175,8 +176,8 @@ void delbook_name(book *head) {
 }
 //管理员登陆函数
 //根据管理员账号密码匹配管理员
-void find_admin(admin *head1,book *head2) {
-	char input[40],*ptr;
+void find_admin(admin *head_a, book *head_b) {
+	char input[40], *ptr;
 	char id[20], paswd[20];
 	InputBox(input, 100, 0, "请输入您的账号和密码（中间以空格分隔）:", 0, 0, 0, false);
 	//进行字符串分割
@@ -184,26 +185,191 @@ void find_admin(admin *head1,book *head2) {
 	strcpy(id, ptr);
 	ptr = strtok(NULL, " ");
 	strcpy(paswd, ptr);
-	admin *p = head1->next;
+	admin *p = head_a->next;
 	while (p != NULL) {
-		if (strcmp(p->id,id) == 0) 
+		if (strcmp(p->id, id) == 0)
 		{ //找到相同账号的管理员
-			if (strcmp(p->paswd, paswd) == 0) 
-			{ 
+			if (strcmp(p->paswd, paswd) == 0)
+			{
 				//密码正确
-				outtext("管理员登陆成功");
 				//在这跳转管理员功能主界面
-				admin_function(head2);
+				admin_function(head_b);
+				
+			}
+			else
+			{
+				//outtext("登陆失败，密码错误");
+				//在这里添加返回主页面
+				goto tiaozhuan51;
+			}
+		}
+		p = p->next;
+	}
+	//outtext("登陆失败，账号错误");
+	//在这里添加返回主页面
+	goto tiaozhuan51;
+tiaozhuan51:;
+}
+
+//根据学生借书证号匹配学生
+void find_student(student *head_s,book *head_b,char book_id[]) {
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice;//清屏
+
+	char id[20];
+	InputBox(id, 100, 0, "请输入您的借书证号:", 0, 0, 0, false);
+	student *p = head_s->next;
+	if (head_s == NULL)//链表为空链表
+	{
+		outtext("学生信息库中没有信息");
+		return;
+	}
+	while (p != NULL) {
+		if (strcmp(p->id, id) == 0) {//找到了这个学生
+			if (p->canb > 0) {
+				p->canb -= 1;//他的可借数目减一
+				borrow_book(head_b, book_id);//成功调用借书函数
 				break;
 			}
-			else 
-			{
-				outtext("登陆失败，密码错误");
-				//在这里添加返回主页面
+			else {
+				outtext("您的可借数目已达上限");
 				break;
 			}
 		}
+		p = p->next;
 	}
-	outtext("登陆失败，账号错误");
-	//在这里添加返回主页面
+	if (p == NULL) {
+		outtext("您的借书证输入错误");
+	}
+	free(p);
+
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回主页面");
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+
+				goto tiaozhuan12;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan12:;//跳转学生借书功能页面
+}
+
+//根据教师借书证号匹配教师
+void find_teacher(teacher *head_t,book *head_b, char book_id[]) {
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice;//清屏
+
+	char id[20];
+	InputBox(id, 100, 0, "请输入您的借书证号:", 0, 0, 0, false);
+	teacher *p = head_t->next;
+	if (head_t == NULL)//链表为空链表
+	{
+		outtext("教师信息库中没有信息");
+		return;
+	}
+	while (p != NULL) {
+		if (strcmp(p->id, id) == 0) {//找到了这个学生
+			if (p->canb > 0) {
+				p->canb -= 1;//他的可借数目减一
+				borrow_book(head_b, book_id);//成功调用借书函数
+				break;
+			}
+			else {
+				outtext("您的可借数目已达上限");
+				break;
+			}
+		}
+		p = p->next;
+	}
+	if (p == NULL) outtext("您的借书证输入错误");
+	free(p);
+
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回主页面");
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+
+				goto tiaozhuan12;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan12:;//跳转教师借书功能页面
+}
+
+
+//借书函数（主要是查找并将状态改为false
+void borrow_book(book *head, char id[]) {
+	book *p = head->next;
+	if (head == NULL)//链表为空链表
+	{
+		outtext("图书库中没有图书");
+		return;
+	}
+	while (p != NULL) {
+		if (strcmp(p->id, id) == 0) {//找到了这本书
+			if (p->state == 1) {
+				p->state = 0;
+				outtext("借书成功");
+				break;
+			}
+			else {
+				outtext("这本书已被借走");
+				break;
+			}
+		}
+		p = p->next;
+	}
+	if (p == NULL) outtext("您所借的书不存在");
+}
+
+//还书函数（主要是查找并将状态改为true
+void return_book(book *head, char id[]) {
+	book *p = head->next;
+	if (head == NULL)//链表为空链表
+	{
+		outtext("图书库中没有图书");
+		return;
+	}
+	while (p != NULL) {
+		if (strcmp(p->id, id) == 0) {//找到了这本书
+			if(p->state == false){
+				p->state = true;
+				outtext("还书成功");
+				break;
+			}
+			else {
+				outtext("还书失败");
+				break;
+			}
+		}
+		p = p->next;
+	}
+	if (p == NULL) outtext("还书失败");
 }

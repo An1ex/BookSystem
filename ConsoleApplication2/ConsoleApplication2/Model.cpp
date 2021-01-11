@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include <graphics.h>
 #include <conio.h>
-#include<stdbool.h> //布尔型，把书的已借/在库状态用布尔型存储
 #include<string.h>
 #include<time.h> //获取时间函数
 #include<Model.h>
@@ -36,6 +35,8 @@ book *create_bklink() {
 		q->day = fday;
 		q->price = fprice;
 		strcpy(q->type, ftype);
+		q->state = 1;
+
 		p->next = q;
 		p = q;
 	}
@@ -63,6 +64,9 @@ student *create_stulink() {
 		strcpy(q->name, fname);
 		strcpy(q->stuclass, fstuclass);
 		strcpy(q->stuid, fstuid);
+		q->canb = 5;
+		q->cant = 7;
+
 		p->next = q;
 		p = q;
 	}
@@ -89,6 +93,9 @@ teacher *create_tealink() {
 		strcpy(q->id, fid);
 		strcpy(q->name, fname);
 		strcpy(q->teaid, fteaid);
+		q->canb = 10;
+		q->cant = 14;
+
 		p->next = q;
 		p = q;
 	}
@@ -130,23 +137,25 @@ admin *create_admlink() {
 //输出图书链表到屏幕和文件output.txt 
 void outlink(book *head) {
 	book *p = head->next;
-	/*FILE *w = fopen("F:\\codespace\\c&c++\\C Design homework\\project\\output.txt", "w");
+	/*FILE *w = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\book.txt", "w");
 	if (w == NULL) {
 		printf("Open output file falied");
 		return;
-	}
-	*/
-	char str[200];
-	int line = 25;
-	//wchar_t info[200];
+	}*/
+	
+	char str[200],sta[10];
+	int line = 40;
 	while (p) {
-		//mbstowcs(info, str, 200);
-		sprintf(str, "%s %s %s %s %4d %02d %02d %.2lf %s", p->id, p->name, p->author, p->publish, p->year, p->month, p->day, p->price, p->type);
+		if (p->state == 1) {
+			strcpy(sta, "可借");
+		}
+		else strcpy(sta, "不可借");
+		sprintf(str, "%s %s %s %s %4d %02d %02d %.2lf %s %s", p->id, p->name, p->author, p->publish, p->year, p->month, p->day, p->price, p->type, sta);
 		outtextxy(0, line, str);
 		p = p->next;
-		line += 25;
+		line += 20;
 	}
-	//fprintf(w, "\n");
+	//fprintf(w, "%s\n",str);
 	//fclose(w);
 	return;
 }
@@ -160,16 +169,14 @@ void outlink(student *head) {
 		return;
 	}*/
 	char str[200];
-	int line = 25;
-	//wchar_t info[200];
+	int line = 40;
 	while (p) {
-		//mbstowcs(info, str, 200);
 		sprintf(str, "%s %s %s %s", p->id, p->name, p->stuclass, p->stuid);
 		outtextxy(0, line, str);
 		p = p->next;
-		line += 25;
+		line += 20;
 	}
-	//fprintf(w, "\n");
+	//fprintf(w, "%s\n",str);
 	//fclose(w);
 	return;
 }
@@ -184,16 +191,14 @@ void outlink(teacher *head) {
 		return;
 	}*/
 	char str[200];
-	int line = 25;
-	//wchar_t info[200];
+	int line = 40;
 	while (p) {
-		//mbstowcs(info, str, 200);
 		sprintf(str, "%s %s %s", p->id, p->name, p->teaid);
 		outtextxy(0, line, str);
 		p = p->next;
-		line += 25;
+		line += 20;
 	}
-	//fprintf(w, "\n");
+	//fprintf(w, "%s\n",str);
 	//fclose(w);
 	return;
 }
@@ -208,16 +213,14 @@ void outlink(admin *head) {
 	}
 	*/
 	char str[200];
-	int line = 25;
-	//wchar_t info[200];
+	int line = 40;
 	while (p) {
-		//mbstowcs(info, str, 200);
 		sprintf(str, "%s %s %s", p->id, p->name, p->paswd);
 		outtextxy(0, line, str);
 		p = p->next;
-		line += 25;
+		line += 20;
 	}
-	//fprintf(w, "\n");
+	//fprintf(w, "%s\n",str);
 	//fclose(w);
 	return;
 }

@@ -5,45 +5,74 @@
 #include<stdio.h>
 #include <graphics.h>
 #include <conio.h>
-#include<stdbool.h> //布尔型，把书的已借/在库状态用布尔型存储
 #include<string.h>
 #include<time.h> //获取时间函数
 //借书功能
-void Book_Borrow(book *head)
+void Book_Borrow(book *head_b, student *head_s, teacher *head_t)
 {
+	char id[20];
 	initgraph(640, 480);//初始化窗口（窗口大小）
-	findbook_id(head);
+	InputBox(id, 100, 0, "请输入您想要借阅的书的书号:", 0, 0, 0, false);
+	findbook_id(head_b,id);
+	roundrect(250, 220, 410, 260, 30, 30);
+	outtextxy(290, 233, "学生借书证");//坐标，输出文字
+	roundrect(250, 290, 410, 330, 30, 30);
+	outtextxy(290, 303, "教师借书证");//坐标，输出文字
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
-	while (1)
+	while (true)
 	{
-		MOUSEMSG msg = GetMouseMsg();//定义一个鼠标并获取鼠标信息(消息分发)
-		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
-		{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>220 && msg.y < 260)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 220, 410, 260, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				find_student(head_s,head_b,id);
+				goto tiaozhuan10;
+
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>290 && msg.y < 330)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 290, 410, 330, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				find_teacher(head_t, head_b, id);
+				goto tiaozhuan10;
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
 			setlinecolor(RED);//设置（绘画）线条颜色为红色
 			roundrect(250, 360, 410, 400, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
-				goto tiaozhuan1;
+				goto tiaozhuan10;
 			}
 		}
-		else
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
 		{
 			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 220, 410, 260, 30, 30);// 画圆角矩形（坐标，圆角大小）
+			roundrect(250, 290, 410, 330, 30, 30);// 画圆角矩形（坐标，圆角大小）
 			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
 		}
 	}
-tiaozhuan1:;
-
+tiaozhuan10:;//跳转借书功能页面
 }
 
 //还书功能
 void Book_Return(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
-	char s[1000];
-	InputBox(s, 100, NULL, "请输入相关信息：", NULL, 300, 200, false);
-	outtextxy(0, 0, s);
+	char id[20];
+	InputBox(id, 100, NULL, "请输入所还书的书号：", 0, 0, 0, false);
+	return_book(head,id);//还书函数
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
 	while (1)
@@ -56,7 +85,7 @@ void Book_Return(book *head)
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
 
-				goto tiaozhuan1;
+				goto tiaozhuan20;
 
 			}
 
@@ -69,76 +98,131 @@ void Book_Return(book *head)
 
 
 	}
-tiaozhuan1:;
+tiaozhuan20:;
 }
 
 //查询功能
 void Book_Search(book *head)
 {
+	char id[20],name[20];
 	initgraph(640, 480);//初始化窗口（窗口大小）
-	findbook_id(head);
+tiaozhuan30:;
+	roundrect(250, 220, 410, 260, 30, 30);
+	outtextxy(300, 233, "书号查询");//坐标，输出文字
+	roundrect(250, 290, 410, 330, 30, 30);
+	outtextxy(300, 303, "书名查询");//坐标，输出文字
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
-	while (1)
+	while (true)
 	{
-		MOUSEMSG msg = GetMouseMsg();//定义一个鼠标并获取鼠标信息(消息分发)
-		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
-		{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>220 && msg.y < 260)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 220, 410, 260, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				InputBox(id, 100, 0, "请输入您想要的书的书号:", 0, 0, 0, false);
+				findbook_id(head, id);//调用按书号查找函数
+				goto tiaozhuan30;
+
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>290 && msg.y < 330)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 290, 410, 330, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				InputBox(name, 100, 0, "请输入您想要的书的书名:", 0, 0, 0, false);
+				findbook_name(head, name);//调用按书名查找函数
+				goto tiaozhuan30;
+
+
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
 			setlinecolor(RED);//设置（绘画）线条颜色为红色
 			roundrect(250, 360, 410, 400, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
 
-				goto tiaozhuan1;
+				goto tiaozhuan00;
 
 			}
-
 		}
-		else
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
 		{
 			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 220, 410, 260, 30, 30);// 画圆角矩形（坐标，圆角大小）
+			roundrect(250, 290, 410, 330, 30, 30);// 画圆角矩形（坐标，圆角大小）
 			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
 		}
-
-
 	}
-tiaozhuan1:;
-
+tiaozhuan00:;
 }
 
 //统计功能
 void Book_Count(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
-	char s[1000];
-	InputBox(s, 100, NULL, "请输入相关信息：", NULL, 300, 200, false);
-	outtextxy(0, 0, s);
+	cleardevice;
+tiaozhuan40:;
+	roundrect(250, 220, 410, 260, 30, 30);
+	outtextxy(290, 233, "借阅排行榜");//坐标，输出文字
+	roundrect(250, 290, 410, 330, 30, 30);
+	outtextxy(285, 303, "书库可借数目");//坐标，输出文字
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
-	while (1)
+	while (true)
 	{
-		MOUSEMSG msg = GetMouseMsg();//定义一个鼠标并获取鼠标信息(消息分发)
-		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
-		{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>220 && msg.y < 260)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 220, 410, 260, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				//Borrow_ranking();
+				goto tiaozhuan40;
+
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>290 && msg.y < 330)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 290, 410, 330, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+				//Borrow_number();
+				goto tiaozhuan40;
+			}
+
+		}
+		else if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
 			setlinecolor(RED);//设置（绘画）线条颜色为红色
 			roundrect(250, 360, 410, 400, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
 
-				goto tiaozhuan1;
+				goto tiaozhuan00;
 
 			}
-
 		}
-		else
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
 		{
 			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 220, 410, 260, 30, 30);// 画圆角矩形（坐标，圆角大小）
+			roundrect(250, 290, 410, 330, 30, 30);// 画圆角矩形（坐标，圆角大小）
 			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
 		}
-
-
 	}
-tiaozhuan1:;
+tiaozhuan00:;
 }
 
 //管理员添加功能函数

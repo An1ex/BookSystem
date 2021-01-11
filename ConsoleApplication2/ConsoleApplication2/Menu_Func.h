@@ -7,7 +7,7 @@
 #include<Menu_Func.h>
 
 //借书功能
-void Book_Borrow(book *head);
+void Book_Borrow(book *head_b,student *head_s,teacher *head_t);
 
 //还书功能
 void Book_Return(book *head);

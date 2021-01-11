@@ -14,7 +14,7 @@ typedef struct book {
     int year, month, day; //年、月、日
 	double price; //价格
 	char type[20]; // 类别
-	bool state = true; //书籍状态，true为可借，false为不可借，初始状态为可借
+	int state = 1; //书籍状态，1为可借，0为不可借，初始状态为可借
 	struct book *next;
 }Book;
 

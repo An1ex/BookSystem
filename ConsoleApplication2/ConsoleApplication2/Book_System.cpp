@@ -5,7 +5,6 @@
 #include<stdio.h>
 #include <graphics.h>
 #include <conio.h>
-//#include<stdbool.h> 布尔型，本来是想把书的已借/在库状态用布尔型存储
 #include<string.h>
 #include<time.h> //获取时间函数
 
@@ -47,7 +46,7 @@ tiaozhuan0:;//跳出循环
 			roundrect(250, 80, 410, 120, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)//uMsg：判断鼠标消息的类型（左键，右键，移动），WM_LBUTTONDOWN表示左键按下
 			{
-				Book_Borrow(head_book);//调用借书功能函数
+				Book_Borrow(head_book,head_stu,head_tea);//调用借书功能函数
 				goto tiaozhuan0;
 			}
 		}
