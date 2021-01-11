@@ -172,7 +172,6 @@ void admin_delete(book *head)
 	InputBox(s, 500, NULL, "请输入相关信息：", NULL, 300, 200, false);//显示输入框
 	outtextxy(0, 0, s);
 }
-
 //管理员查询功能函数 
 
 //管理员功能页面

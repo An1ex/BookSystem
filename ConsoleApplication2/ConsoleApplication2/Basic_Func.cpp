@@ -17,7 +17,6 @@ void add_book(book *head,int n) {
 	newhead->next = newp;
 	char year_c[4],month_c[2],day_c[2],price_c[10];
 	for (int i = 0; i < n; i++) {
-		//sprintf(str, "%s %s %s %s %4d %02d %02d %.2lf %s", newp->id, newp->name, newp->author, newp->publish, newp->date.year, newp->date.month, newp->date.day, newp->price, newp->type);
 		InputBox(newp->id, 100, 0, "请输入您要录入图书的信息，书号:", 0, 0, 0, false);
 		InputBox(newp->name, 100, 0, "请输入您要录入图书的信息，书名:", 0, 0, 0, false);
 		InputBox(newp->author, 100, 0, "请输入您要录入图书的信息，作者:", 0, 0, 0, false);
@@ -192,16 +191,16 @@ void find_admin(admin *head1,book *head2) {
 			if (strcmp(p->paswd, paswd) == 0) 
 			{ 
 				//密码正确
-				break;
 				outtext("管理员登陆成功");
 				//在这跳转管理员功能主界面
 				admin_function(head2);
+				break;
 			}
 			else 
 			{
-				break;
 				outtext("登陆失败，密码错误");
 				//在这里添加返回主页面
+				break;
 			}
 		}
 	}

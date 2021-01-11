@@ -19,7 +19,7 @@ book *create_bklink() {
 	book *p;
 	book *q;
 	p = q = head;
-	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\project(divided)\\book.txt", "r");
+	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\book.txt", "r");
 	if (r == NULL)
 	{
 		printf("Open input file failed");
@@ -51,7 +51,7 @@ student *create_stulink() {
 	student *p;
 	student *q;
 	p = q = head;
-	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\project(divided)\\student.txt", "r");
+	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\student.txt", "r");
 	if (r == NULL)
 	{
 		printf("Open input file failed");
@@ -78,7 +78,7 @@ teacher *create_tealink() {
 	teacher *p;
 	teacher *q;
 	p = q = head;
-	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\project(divided)\\teacher.txt", "r");
+	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\teacher.txt", "r");
 	if (r == NULL)
 	{
 		printf("Open input file failed");
@@ -104,7 +104,7 @@ admin *create_admlink() {
 	admin *p;
 	admin *q;
 	p = q = head;
-	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\project(divided)\\admin.txt", "r");
+	FILE *r = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\admin.txt", "r");
 	if (r == NULL)
 	{
 		printf("Open input file failed");
@@ -112,8 +112,8 @@ admin *create_admlink() {
 	}
 	while (fscanf(r, "%s %s %s",  fname, fid, fpaswd) != EOF) {
 		q = (admin*)malloc(sizeof(admin));
-		strcpy(q->id, fid);
 		strcpy(q->name, fname);
+		strcpy(q->id, fid);
 		strcpy(q->paswd, fpaswd);
 		p->next = q;
 		p = q;
