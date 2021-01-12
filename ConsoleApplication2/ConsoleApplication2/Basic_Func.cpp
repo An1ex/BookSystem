@@ -53,6 +53,43 @@ void add_book(book *head,int n) {
 	outtext("录入完成");
 }
 
+//根据书号修改图书(管理员操作） 
+book *change_book(book *head,char id[]) {
+	char name[20], author[40], publish[40], type[20],year_c[10],month_c[10],day_c[10],price_c[10],state_c[5];
+	int year, month, day, state;
+	double price;
+	book *p = head->next;
+	if (p == NULL) {//链表为空链表
+		outtext("图书库中没有图书");
+	}
+	while (p) {
+		if (strcmp(p->id, id) == 0) { //找到要修改的这本书
+			InputBox(name, 100, 0, "请输入您要修改图书的信息，书名:", 0, 0, 0, false);
+			InputBox(author, 100, 0, "请输入您要修改图书的信息，作者:", 0, 0, 0, false);
+			InputBox(publish, 100, 0, "请输入您要修改图书的信息，出版社:", 0, 0, 0, false);
+			InputBox(year_c, 100, 0, "请输入您要修改图书的信息，出版日期(年):", 0, 0, 0, false);
+			InputBox(month_c, 100, 0, "请输入您要修改图书的信息，出版日期(月):", 0, 0, 0, false);
+			InputBox(day_c, 100, 0, "请输入您要修改图书的信息，出版日期(日):", 0, 0, 0, false);
+			InputBox(price_c, 100, 0, "请输入您要修改图书的信息，价格:", 0, 0, 0, false);
+			InputBox(p->type, 100, 0, "请输入您修改图书的信息，类型:", 0, 0, 0, false);
+			InputBox(state_c, 100, 0, "请输入您修改图书的信息，状态(1或0）:", 0, 0, 0, false);
+			strcpy(p->name, name);
+			strcpy(p->author, author);
+			strcpy(p->publish, publish);
+			p->year = atoi(year_c);
+			p->month = atoi(month_c);
+			p->day = atoi(day_c);
+			p->price = atof(price_c);
+			p->state = atoi(state_c);
+			outtext("修改完成");
+			break;
+		}
+		p = p->next;
+	}
+	if(p == NULL) outtext("未找到这本书");
+	return head;
+}
+
 //根据书号删除图书（管理员操作） 
 void delbook_id(book *head) {
 	char id[20];

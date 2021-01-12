@@ -10,7 +10,10 @@
 //在链表结尾添加新节点
 void add_book(book *head,int n);
 
-//按书号查询图书（管理员操作、借书操作）
+//根据书号修改图书(管理员操作） 
+book *change_book(book *head,char id[]);
+
+//按书号查询图书（管理员操作、查询操作）
 //原则上书号应该唯一，所以此函数也提供查询书号录入错误的书的功能，之后可用删除函数进行删除
 void findbook_id(book *head,char id[]);
 

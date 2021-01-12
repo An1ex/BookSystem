@@ -165,7 +165,7 @@ tiaozhuan30:;
 tiaozhuan00:;
 }
 
-//统计功能（未完成）
+//统计功能（部分完成）
 void Book_Count(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
@@ -174,7 +174,7 @@ tiaozhuan40:;
 	roundrect(250, 220, 410, 260, 30, 30);
 	outtextxy(290, 233, "借阅排行榜");//坐标，输出文字
 	roundrect(250, 290, 410, 330, 30, 30);
-	outtextxy(285, 303, "书库可借数目");//坐标，输出文字
+	outtextxy(285, 303, "书库可借数目");//坐标，输出文字 未实现
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
 	while (true)
@@ -228,7 +228,6 @@ tiaozhuan00:;
 //管理员添加功能函数（已完成）
 void admin_add(book *head)
 {
-	
 	initgraph(640, 480);//初始化窗口（窗口大小）
 	cleardevice();//清屏，相当于刷新页面
 	int n;
@@ -262,13 +261,38 @@ void admin_add(book *head)
 tiaozhuan1:;
 }
 
-//管理员修改功能函数（未写）
+//管理员修改功能函数（已完成）
 void admin_change(book *head)
 {
-	cleardevice();
-	char s[1000];// 定义字符串缓冲区，并接收用户输入
-	InputBox(s, 500, NULL, "请输入相关信息：", NULL, 300, 200, false);
-	outtextxy(0, 0, s);
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice();//清屏，相当于刷新页面
+	char id[20];
+	InputBox(id, 20, 0, "请输入您要修改的图书的书号:", 0, 0, 0, false);//对话框
+	head = change_book(head, id);//调用添加函数
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回上页面");
+	//鼠标触发循环
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+
+				goto tiaozhuan1;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan1:;
 }
 
 //管理员删除功能函数（已完成）
