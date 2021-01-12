@@ -10,7 +10,7 @@
 
 // 录入图书(管理员操作）   
 //在链表结尾添加新节点
-void add_book(book *head,int n) {
+book *add_book(book *head,int n) {
 	book *newhead = (book*)malloc(sizeof(book));
 	book *newp = (book*)malloc(sizeof(book));
 	newhead->next = newp;
@@ -48,9 +48,8 @@ void add_book(book *head,int n) {
 		p = p->next;
 	}//  找到图书库链表的最后一个节点 
 	p = newhead->next;//将新录入的图书链表接上
-	//free(newp);
-	//free(p);
 	outtext("录入完成");
+	return head;
 }
 
 //根据书号修改图书(管理员操作） 
@@ -106,7 +105,7 @@ void delbook_id(book *head,char id[]) {
 	if (p == NULL) {//链表为空链表
 		outtext("图书库中没有图书");
 	}
-	while (p->next != NULL) {
+	while (p != NULL) {
 		if (strcmp(p->id, id) == 0) {
 			p_front->next = p->next;
 			free(p);

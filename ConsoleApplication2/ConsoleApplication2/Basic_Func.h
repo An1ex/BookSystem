@@ -8,7 +8,7 @@
 
 // 录入图书(管理员操作）   
 //在链表结尾添加新节点
-void add_book(book *head,int n);
+book *add_book(book *head,int n);
 
 //根据书号修改图书(管理员操作） 
 book *change_book(book *head,char id[]);

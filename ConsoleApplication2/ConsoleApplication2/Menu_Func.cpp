@@ -169,8 +169,8 @@ tiaozhuan00:;
 void Book_Count(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
-	cleardevice;
 tiaozhuan40:;
+	cleardevice();
 	roundrect(250, 220, 410, 260, 30, 30);
 	outtextxy(290, 233, "借阅排行榜");//坐标，输出文字
 	roundrect(250, 290, 410, 330, 30, 30);
@@ -234,7 +234,7 @@ void admin_add(book *head)
 	char n_c[20];
 	InputBox(n_c, 20, 0, "请输入您要新录入图书的数量:", 0, 0, 0, false);//对话框
 	n = atoi(n_c);
-	add_book(head, n);//调用添加函数
+	head = add_book(head, n);//调用添加函数
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回上页面");
 	//鼠标触发循环
