@@ -126,7 +126,6 @@ void delbook_id(book *head,char id[]) {
 }
 
 //按书号查询图书（管理员操作、借书操作）
-//原则上书号应该唯一，所以此函数也提供查询书号录入错误的书的功能，之后可用删除函数进行删除
 void findbook_id(book *head,char id[]) {
 	book *p = head->next;
 	book *head_find = (book*)malloc(sizeof(book));
@@ -225,7 +224,7 @@ void find_admin(admin *head_a, book *head_b) {
 			{
 				//密码正确
 				//在这跳转管理员功能主界面
-				admin_function(head_b);
+				Admin_Function(head_b);
 			}
 			else
 			{

@@ -331,7 +331,7 @@ tiaozhuan1:;
 
 
 //管理员功能页面(已完成）
-void admin_function(book *head)
+void Admin_Function(book *head)
 {
     tiaozhuan1:;//跳出循环，返回管理员功能页面，重新绘画管理员页面
 	initgraph(640, 480);//初始化窗口（窗口大小）
