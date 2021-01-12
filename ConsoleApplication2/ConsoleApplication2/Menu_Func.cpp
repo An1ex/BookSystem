@@ -7,7 +7,7 @@
 #include <conio.h>
 #include<string.h>
 #include<time.h> //获取时间函数
-//借书功能
+//借书功能（已完成）
 void Book_Borrow(book *head_b, student *head_s, teacher *head_t)
 {
 	char id[20];
@@ -66,7 +66,7 @@ void Book_Borrow(book *head_b, student *head_s, teacher *head_t)
 tiaozhuan10:;//跳转借书功能页面
 }
 
-//还书功能
+//还书功能（已完成）
 void Book_Return(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
@@ -101,7 +101,7 @@ void Book_Return(book *head)
 tiaozhuan20:;
 }
 
-//查询功能
+//查询功能（已完成）
 void Book_Search(book *head)
 {
 	char id[20],name[20];
@@ -165,7 +165,7 @@ tiaozhuan30:;
 tiaozhuan00:;
 }
 
-//统计功能
+//统计功能（未完成）
 void Book_Count(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
@@ -186,7 +186,7 @@ tiaozhuan40:;
 			roundrect(250, 220, 410, 260, 30, 30);
 			if (msg.uMsg == WM_LBUTTONDOWN)
 			{
-				//Borrow_ranking();
+				book_rank(head);//调用借阅排行榜函数
 				goto tiaozhuan40;
 
 			}
@@ -225,21 +225,44 @@ tiaozhuan40:;
 tiaozhuan00:;
 }
 
-//管理员添加功能函数
+//管理员添加功能函数（已完成）
 void admin_add(book *head)
 {
-	cleardevice();
+	
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice();//清屏，相当于刷新页面
 	int n;
 	char n_c[20];
 	InputBox(n_c, 20, 0, "请输入您要新录入图书的数量:", 0, 0, 0, false);//对话框
 	n = atoi(n_c);
-	//char s[1000];// 定义字符串缓冲区，并接收用户输入
-	//InputBox(s, 500, NULL, "请输入相关信息：", NULL, 300, 200, false);
-	add_book(head, n);
-	//outtextxy(0, 0, s);
+	add_book(head, n);//调用添加函数
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回上页面");
+	//鼠标触发循环
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+
+				goto tiaozhuan1;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan1:;
 }
 
-//管理员修改功能函数
+//管理员修改功能函数（未写）
 void admin_change(book *head)
 {
 	cleardevice();
@@ -248,17 +271,40 @@ void admin_change(book *head)
 	outtextxy(0, 0, s);
 }
 
-//管理员删除功能函数
+//管理员删除功能函数（已完成）
 void admin_delete(book *head)
 {
-	cleardevice();
-	char s[1000];// 定义字符串缓冲区，并接收用户输入
-	InputBox(s, 500, NULL, "请输入相关信息：", NULL, 300, 200, false);//显示输入框
-	outtextxy(0, 0, s);
-}
-//管理员查询功能函数 
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice();//清屏，相当于刷新页面
+	delbook_id(head);//调用删除函数
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回上页面");
+	//鼠标触发循环
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
 
-//管理员功能页面
+				goto tiaozhuan1;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan1:;
+}
+
+
+//管理员功能页面(已完成）
 void admin_function(book *head)
 {
     tiaozhuan1:;//跳出循环，返回管理员功能页面，重新绘画管理员页面
@@ -303,7 +349,7 @@ void admin_function(book *head)
 			roundrect(250, 220, 410, 260, 30, 30);
 			if (ms.uMsg == WM_LBUTTONDOWN)
 			{
-				admin_delete(head);//设置（绘画）线条为红色
+				admin_delete(head);//实现管理员删除功能
 				goto tiaozhuan1;//功能实现返回管理员页面
 
 			}

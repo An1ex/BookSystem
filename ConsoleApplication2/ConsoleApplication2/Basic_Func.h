@@ -20,9 +20,6 @@ void findbook_name(book *head,char name[]);
 //根据书号删除图书（管理员操作、借书操作可调用）
 void delbook_id(book *head);
 
-//根据书名删除图书（管理员操作、清除由于输错书号的书的信息）
-void delbook_name(book *head);
-
 //根据管理员账号密码匹配管理员
 void find_admin(admin *head1, book *head2);
 
@@ -34,7 +31,12 @@ void find_teacher(teacher *head_t, book *head_b, char book_id[]);
 
 //借阅排行榜函数（当前总的借书排行榜
 void book_rank(book *head);
-//当前书库可借图书的表格函数（不显示书号，只显示其他信息，加上数量
+
+//排行榜查询是否重名函数
+bwbook* rank_exists(char name[40], bwbook *head);
+
+//当前书库可借图书函数（不显示书号，只显示其他信息，加上数量
+
 
 //借书函数（主要是查找并将状态改为false
 void borrow_book(book *head,char id[]);

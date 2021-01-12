@@ -8,9 +8,9 @@
 //定义图书结构体
 typedef struct book {
 	char id[20];  //图书编号
-	char name[20];  //书名
-	char author[20];//作者
-	char publish[30]; //出版社
+	char name[40];  //书名
+	char author[40];//作者
+	char publish[40]; //出版社
     int year, month, day; //年、月、日
 	double price; //价格
 	char type[20]; // 类别
@@ -18,16 +18,19 @@ typedef struct book {
 	struct book *next;
 }Book;
 
-/*typedef struct bwbook {
-	struct book b;//继承book中的结构体变量
-	char cardid[20];
-	int sdate;
-	int edate;
-	double fine;
-	bool state;//true为可借，false为不可借
+//已借出图书结构体，仅用在统计功能中
+typedef struct bwbook { 
+	//char id[20];  //图书编号
+	char name[50];  //书名
+	char author[50];//作者
+	char publish[50]; //出版社
+	int year, month, day; //年、月、日
+	double price; //价格
+	char type[30]; // 类别
+	int num = 0;//已借出数量
+	//int state = 1; //书籍状态，1为可借，0为不可借，初始状态为可借
 	struct bwbook *next;
-	//从上到下依次为编号、书名、金额、借书证号、借书日期、到期日期、罚款金额
-}bwbook;*/
+}bwbook;
 
 //定义读者_学生结构体
 typedef struct student {
@@ -56,7 +59,7 @@ typedef struct teacher {
 typedef struct admin {
 	char id[20];  //管理员工号
 	char name[20];  //姓名
-	char paswd[20]; //密码
+	char paswd[40]; //密码
 	struct admin *next;
 }Admin;
 
@@ -83,5 +86,8 @@ void outlink(teacher *head);
 
 //输出管理员链表到屏幕和文件output.txt 
 void outlink(admin *head);
+
+//输出排行榜链表到屏幕
+void outrank(bwbook *head);
 
 #endif

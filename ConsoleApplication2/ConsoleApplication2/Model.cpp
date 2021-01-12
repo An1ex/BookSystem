@@ -224,3 +224,20 @@ void outlink(admin *head) {
 	//fclose(w);
 	return;
 }
+
+
+//输出排行榜链表到屏幕
+void outrank(bwbook *head) {
+	bwbook *p = head->next;
+	char str[200];
+	int line = 40;
+	outtextxy(0, 0, "借书排行榜:");
+	outtextxy(0, 20, "书名    作者      出版社   （出版日期）年   月   日   价格   类别    已借出数");
+	while (p) {
+		sprintf(str, "%s %s %s %4d %02d %02d %.2lf %s %d", p->name, p->author, p->publish, p->year, p->month, p->day, p->price, p->type, p->num);
+		outtextxy(0, line, str);
+		p = p->next;
+		line += 20;
+	}
+	return;
+}

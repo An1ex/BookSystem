@@ -14,7 +14,9 @@ void add_book(book *head,int n) {
 	book *newhead = (book*)malloc(sizeof(book));
 	book *newp = (book*)malloc(sizeof(book));
 	newhead->next = newp;
-	char year_c[4],month_c[2],day_c[2],price_c[10];
+	char year_c[10],month_c[10],day_c[10],price_c[10];
+	FILE *w = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\book.txt", "a+");//添加图书的同时写入txt信息文件
+	//fprintf(w, "\n");
 	for (int i = 0; i < n; i++) {
 		InputBox(newp->id, 100, 0, "请输入您要录入图书的信息，书号:", 0, 0, 0, false);
 		InputBox(newp->name, 100, 0, "请输入您要录入图书的信息，书名:", 0, 0, 0, false);
@@ -29,21 +31,49 @@ void add_book(book *head,int n) {
 		newp->month = atoi(month_c);
 		newp->day = atoi(day_c);
 		newp->price = atof(price_c);
+		newp->state = 1;
+		
+		
+		fprintf(w, "%s %s %s %s %4d %02d %02d %.2lf %s\n", newp->id, newp->name,newp->author, newp->publish, newp->year, newp->month, newp->day, newp->price, newp->type);//更新录入信息到.txt文件
+
 		if (i == n - 1) newp->next = NULL;
 		else {
 			newp->next = (book*)malloc(sizeof(book));
 			newp = newp->next;
 		}
 	}
+	fclose(w);//关闭文件
 	book *p = head->next;
 	while (p != NULL) {
 		p = p->next;
 	}//  找到图书库链表的最后一个节点 
 	p = newhead->next;//将新录入的图书链表接上
-	free(newp);
-	free(p);
-	outtext("录入完成，更新后图书库信息为:");
-	outlink(head);
+	//free(newp);
+	//free(p);
+	outtext("录入完成");
+}
+
+//根据书号删除图书（管理员操作） 
+void delbook_id(book *head) {
+	char id[20];
+	InputBox(id, 100, 0, "请输入您想要删除的书的书号:", 0, 0, 0, false);
+	book *p_front = head;
+	book *p = head->next;
+	if (p == NULL) {//链表为空链表
+		outtext("图书库中没有图书");
+	}
+	while (p->next != NULL) {
+		if (strcmp(p->id, id) == 0) {
+			p_front->next = p->next;
+			free(p);
+			p = p_front->next;
+		}
+		else {
+			p_front = p_front->next;
+			p = p->next;
+		}
+	}
+	outtext("删除完成");
 }
 
 //按书号查询图书（管理员操作、借书操作）
@@ -82,7 +112,7 @@ void findbook_id(book *head,char id[]) {
 	}
 	else {
 		outtextxy(0,0,"您的查找结果为:");
-		outtextxy(0,20,"书号   书名  作者      出版社             年  月  日 价格   类别    状态");
+		outtextxy(0,20,"书号   书名    作者      出版社   （出版日期）年   月   日   价格   类别    状态");
 		outlink(head_find);
 	}
 }
@@ -122,60 +152,13 @@ void findbook_name(book *head,char name[]) {
 	}
 	else {
 		outtextxy(0, 0, "您的查找结果为:");
-		outtextxy(0, 20, "书号   书名  作者      出版社             年  月  日 价格   类别    状态");
+		outtextxy(0, 20, "书号   书名    作者      出版社   （出版日期）年   月   日   价格   类别    状态");
 		outlink(head_find);
 	}
 }
 
-//根据书号删除图书（管理员操作、借书操作可调用）
-void delbook_id(book *head) {
-	char id[20];
-	InputBox(id, 100, 0, "请输入您想要删除的书的书号:", 0, 0, 0, false);
-	book *p_front = head;
-	book *p = head->next;
-	if (p == NULL) {//链表为空链表
-		outtext("图书库中没有图书");
-	}
-	while (p->next != NULL) {
-		if (strcmp(p->id, id) == 0) {
-			p_front->next = p->next;
-			free(p);
-			p = p_front->next;
-		}
-		else {
-			p_front = p_front->next;
-			p = p->next;
-		}
-	}
-	outtext("删除完成，更新后图书库信息为:");
-	outlink(head);
-}
 
-//根据书名删除图书（管理员操作、清除由于输错书号的书的信息）
-void delbook_name(book *head) {
-	char name[20];
-	InputBox(name, 100, 0, "请输入您想要删除的书的书名:", 0, 0, 0, false);
-	book *p_front = head;
-	book *p = head->next;
-	if (p == NULL) {//链表为空链表
-		outtext("图书库中没有图书");
-	}
-	while (p->next != NULL) {
-		if (strcmp(p->name, name) == 0) {
-			p_front->next = p->next;
-			free(p);
-			p = p_front->next;
-		}
-		else {
-			p_front = p_front->next;
-			p = p->next;
-		}
-	}
-	outtext("删除完成，更新后图书库信息为:");
-	outlink(head);
-}
-//管理员登陆函数
-//根据管理员账号密码匹配管理员
+//管理员登陆函数(根据管理员账号密码匹配管理员)
 void find_admin(admin *head_a, book *head_b) {
 	char input[40], *ptr;
 	char id[20], paswd[20];
@@ -194,7 +177,6 @@ void find_admin(admin *head_a, book *head_b) {
 				//密码正确
 				//在这跳转管理员功能主界面
 				admin_function(head_b);
-				
 			}
 			else
 			{
@@ -241,7 +223,6 @@ void find_student(student *head_s,book *head_b,char book_id[]) {
 	if (p == NULL) {
 		outtext("您的借书证输入错误");
 	}
-	free(p);
 
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
@@ -282,7 +263,7 @@ void find_teacher(teacher *head_t,book *head_b, char book_id[]) {
 		return;
 	}
 	while (p != NULL) {
-		if (strcmp(p->id, id) == 0) {//找到了这个学生
+		if (strcmp(p->id, id) == 0) {//找到了这个教师
 			if (p->canb > 0) {
 				p->canb -= 1;//他的可借数目减一
 				borrow_book(head_b, book_id);//成功调用借书函数
@@ -296,7 +277,6 @@ void find_teacher(teacher *head_t,book *head_b, char book_id[]) {
 		p = p->next;
 	}
 	if (p == NULL) outtext("您的借书证输入错误");
-	free(p);
 
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回主页面");
@@ -324,7 +304,7 @@ tiaozhuan12:;//跳转教师借书功能页面
 }
 
 
-//借书函数（主要是查找并将状态改为false
+//借书函数（主要是查找并将状态改为不可借false）
 void borrow_book(book *head, char id[]) {
 	book *p = head->next;
 	if (head == NULL)//链表为空链表
@@ -349,7 +329,7 @@ void borrow_book(book *head, char id[]) {
 	if (p == NULL) outtext("您所借的书不存在");
 }
 
-//还书函数（主要是查找并将状态改为true
+//还书函数（主要是查找并将状态改为可借true）
 void return_book(book *head, char id[]) {
 	book *p = head->next;
 	if (head == NULL)//链表为空链表
@@ -372,4 +352,77 @@ void return_book(book *head, char id[]) {
 		p = p->next;
 	}
 	if (p == NULL) outtext("还书失败");
+}
+
+//排行榜查询是否重名函数
+bwbook* rank_exists(char name[40], bwbook *head) {
+	bwbook *p = head->next;
+	while (p) {
+		if (strcmp(name, p->name) == 0) {
+			return p;
+		}
+		p = p->next;
+	}
+	return NULL;
+}
+
+//借阅排行榜函数（当前总的已出借图书排行榜）
+void book_rank(book *head) {
+	book *p = head->next;
+	bwbook *head_rank = (bwbook*)malloc(sizeof(bwbook));//已借出图书结构体
+	head_rank->next = NULL;
+	bwbook *q = head_rank;
+	bwbook *tmp;
+	if (head == NULL)//链表为空链表
+	{
+		outtext("图书库中没有图书");
+		return;
+	}
+	while (p != NULL) {
+		if (p->state == 0)//找到已借出的书
+			if (head_rank->next && (tmp = rank_exists(p->name, head_rank)))
+				tmp->num += 1;
+			else
+			{
+				q->next = (bwbook *)malloc(sizeof(bwbook));
+				q = q->next;
+				q->next = NULL;
+				strcpy(q->name, p->name);
+				strcpy(q->author, p->author);
+				strcpy(q->publish, p->publish);
+				q->year = p->year;
+				q->month = p->month;
+				q->day = p->day;
+				q->price = p->price;
+				q->num = 1;
+				strcpy(q->type, p->type);
+			}
+		p = p->next;
+	}
+	initgraph(640, 480);//初始化窗口（窗口大小）
+	cleardevice;
+	outrank(head_rank);//借阅排行榜输出函数
+	roundrect(250, 360, 410, 400, 30, 30);
+	outtextxy(290, 370, "返回上页面");
+	while (true)
+	{
+		MOUSEMSG msg = GetMouseMsg();//重新定义一个鼠标信息
+		if (msg.x > 250 && msg.x < 410 && msg.y>360 && msg.y < 400)
+		{// 鼠标移动到上条件坐标，圆角矩形框变红色
+			setlinecolor(RED);//设置（绘画）线条颜色为红色
+			roundrect(250, 360, 410, 400, 30, 30);
+			if (msg.uMsg == WM_LBUTTONDOWN)
+			{
+
+				goto tiaozhuan41;
+
+			}
+		}
+		else//当鼠标移动到其他坐标，圆角矩形框架变为白色
+		{
+			setlinecolor(WHITE);//设置线条为白色
+			roundrect(250, 360, 410, 400, 30, 30);// 画圆角矩形（坐标，圆角大小）
+		}
+	}
+tiaozhuan41:;
 }
