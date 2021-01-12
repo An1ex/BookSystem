@@ -34,7 +34,7 @@ void add_book(book *head,int n) {
 		newp->state = 1;
 		
 		
-		fprintf(w, "%s %s %s %s %4d %02d %02d %.2lf %s\n", newp->id, newp->name,newp->author, newp->publish, newp->year, newp->month, newp->day, newp->price, newp->type);//更新录入信息到.txt文件
+		fprintf(w, "%s %s %s %s %4d %02d %02d %.2lf %s\n", newp->id, newp->name,newp->author, newp->publish, newp->year, newp->month, newp->day, newp->price, newp->type);//更新录入后信息到.txt文件
 
 		if (i == n - 1) newp->next = NULL;
 		else {
@@ -58,6 +58,7 @@ book *change_book(book *head,char id[]) {
 	char name[20], author[40], publish[40], type[20],year_c[10],month_c[10],day_c[10],price_c[10],state_c[5];
 	int year, month, day, state;
 	double price;
+	FILE *w = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\book.txt", "w+");//修改图书的同时写入txt信息文件
 	book *p = head->next;
 	if (p == NULL) {//链表为空链表
 		outtext("图书库中没有图书");
@@ -87,13 +88,19 @@ book *change_book(book *head,char id[]) {
 		p = p->next;
 	}
 	if(p == NULL) outtext("未找到这本书");
+	p = head->next;
+	while (p) {
+		fprintf(w, "%s %s %s %s %4d %02d %02d %.2lf %s\n", p->id, p->name, p->author, p->publish, p->year, p->month, p->day, p->price, p->type);//更新修改后信息到.txt文件
+		p = p->next;
+	}
+	fclose(w);//关闭文件
+
 	return head;
 }
 
 //根据书号删除图书（管理员操作） 
-void delbook_id(book *head) {
-	char id[20];
-	InputBox(id, 100, 0, "请输入您想要删除的书的书号:", 0, 0, 0, false);
+void delbook_id(book *head,char id[]) {
+	FILE *w = fopen("F:\\codespace\\c&c++\\C Design homework\\repo\\BookSystem\\book.txt", "w+");//删除图书的同时写入txt信息文件
 	book *p_front = head;
 	book *p = head->next;
 	if (p == NULL) {//链表为空链表
@@ -111,6 +118,12 @@ void delbook_id(book *head) {
 		}
 	}
 	outtext("删除完成");
+	p = head->next;
+	while (p) {
+		fprintf(w, "%s %s %s %s %4d %02d %02d %.2lf %s\n", p->id, p->name, p->author, p->publish, p->year, p->month, p->day, p->price, p->type);//更新删除后信息到.txt文件
+		p = p->next;
+	}
+	fclose(w);//关闭文件
 }
 
 //按书号查询图书（管理员操作、借书操作）

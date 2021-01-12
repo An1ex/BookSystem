@@ -300,7 +300,9 @@ void admin_delete(book *head)
 {
 	initgraph(640, 480);//初始化窗口（窗口大小）
 	cleardevice();//清屏，相当于刷新页面
-	delbook_id(head);//调用删除函数
+	char id[20];
+	InputBox(id, 100, 0, "请输入您想要删除的书的书号:", 0, 0, 0, false);
+	delbook_id(head,id);//调用删除函数
 	roundrect(250, 360, 410, 400, 30, 30);
 	outtextxy(290, 370, "返回上页面");
 	//鼠标触发循环

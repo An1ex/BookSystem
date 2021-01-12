@@ -21,7 +21,7 @@ void findbook_id(book *head,char id[]);
 void findbook_name(book *head,char name[]);
 
 //根据书号删除图书（管理员操作、借书操作可调用）
-void delbook_id(book *head);
+void delbook_id(book *head,char id[]);
 
 //根据管理员账号密码匹配管理员
 void find_admin(admin *head1, book *head2);
